@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/
+lib/isomorphic/skins/Enterprise/images/AdvancedFilter/
+lib/isomorphic/skins/Enterprise/images/Backgrounds/
+lib/isomorphic/skins/Enterprise/images/ColorChooser/
+lib/isomorphic/skins/Enterprise/images/Portlet/
+lib/isomorphic/skins/Enterprise/images/Stretchbar/
+lib/isomorphic/skins/Enterprise/images/common/
+lib/isomorphic/skins/Enterprise/images/controls/
+lib/isomorphic/skins/Enterprise/images/corners/
+lib/isomorphic/skins/Enterprise/images/edges/rounded/
+lib/isomorphic/skins/Enterprise/images/edges/square/

@@ -32,11 +32,6 @@ function createLayout() {
     });
 
 
-
-    // treeGrid.setDataSource(dataSource);
-    // dataSource.addData(customers);
-
-
     // var treeData = Tree.create({ID: "treeData", data: customers});
     // treeGrid.setData(treeData);
 
@@ -61,15 +56,35 @@ function createLayout() {
     });
 }
 
+function unloadNode(parent) {
+    dataSource.removeData({id:parent+"_0"});
+    dataSource.removeData({id:parent+"_1"});
+}
+
+
 function onTreeViewOpenFolder(node) {
     console.log(node);
 
-    if (node.type == "customer") {
-        dataSource.addData(contacts);
-        dataSource.addData({parentId: node.id, title: "Контакты"});
-        dataSource.addData({parentId: node.id, title: "Контракты"});
-    }
 
+    switch (node.type) {
+        case "customer":
+            unloadNode(node.id);
+            dataSource.addData({parentId: node.id, id: node.id+"_0", title: "Контакты", type: "contactsFolder"});
+            dataSource.addData({parentId: node.id, id: node.id+"_1", title: "Контракты", type: "contractsFolder"});
+            // for (var i = 0; i < contacts.length; i++) {
+            //     dataSource.addData({parentId: node.id, id: contacts[i].id, title: contacts[i].title, isFolder: false});
+            // }
+            break;
+
+        case "contactsFolder":
+            console.log("This is Contacts");
+
+            break;
+
+        case "contractsFolder":
+            console.log("This is contracts");
+            break;
+    }
     treeGrid.getData().openFolder(node);
 }
 
@@ -78,13 +93,13 @@ function onNodeClick() {
 }
 
 function onBtnAddClick() {
-    // dataSource.addData({id: 77, parentId: 1, title: "Acronis"});
-
-    ///dataSource.addData(customers);
-    // console.log(dataSource.cacheData);
-
+    // var treeData = Tree.create({ID:"treeData", data: dataSource.cacheData});
+    // console.log(treeData);
+    // treeGrid.setData(treeData);
 }
 
 function onBtnDelClick() {
-    console.log("Delete");
+    // console.log("Delete");
+    dataSource.removeData({id:"0_0"});
+    dataSource.removeData({id:"0_1"});
 }
