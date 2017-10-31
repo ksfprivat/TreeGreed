@@ -57,8 +57,10 @@ function createLayout() {
 }
 
 function unloadNode(parent) {
-    dataSource.removeData({id:parent+"_0"});
-    dataSource.removeData({id:parent+"_1"});
+    if (parent.children != "") {
+        dataSource.removeData({id: parent.id + "_contacts"});
+        dataSource.removeData({id: parent.id + "_contracts"});
+    }
 }
 
 
@@ -68,21 +70,18 @@ function onTreeViewOpenFolder(node) {
 
     switch (node.type) {
         case "customer":
-            unloadNode(node.id);
-            dataSource.addData({parentId: node.id, id: node.id+"_0", title: "Контакты", type: "contactsFolder"});
-            dataSource.addData({parentId: node.id, id: node.id+"_1", title: "Контракты", type: "contractsFolder"});
+            unloadNode(node);
+            dataSource.addData({parentId: node.id, id: node.id+"_contacts", title: "Контакты", type: "contact"});
+            dataSource.addData({parentId: node.id, id: node.id+"_contracts", title: "Контракты", type: "contract"});
             // for (var i = 0; i < contacts.length; i++) {
             //     dataSource.addData({parentId: node.id, id: contacts[i].id, title: contacts[i].title, isFolder: false});
             // }
             break;
-
-        case "contactsFolder":
-            console.log("This is Contacts");
-
-            break;
-
-        case "contractsFolder":
-            console.log("This is contracts");
+        case "contact":
+            console.log("This is contacts");
+            for (var i = 0; i < contacts.length; i++) {
+                dataSource.addData({parentId: node.id, title: contacts[i].title, isFolder: false});
+            }
             break;
     }
     treeGrid.getData().openFolder(node);
