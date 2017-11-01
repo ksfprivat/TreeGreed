@@ -1,9 +1,9 @@
 var customers = [
-        {id: 0, title: "Microsoft", type: "customer", isFolder: true},
-        {id: 1, title: "Yandex", type: "customer"},
-        {id: 2, title: "Google", type: "customer"},
-        {id: 3, title: "Oracle", type: "customer"},
-        {id: 4, title: "Yahoo!", type: "customer"}];
+        {id: 0, title: "Microsoft", type: "customer", search: true},
+        {id: 1, title: "Yandex", type: "customer", search: true},
+        {id: 2, title: "Google", type: "customer", search: true},
+        {id: 3, title: "Oracle", type: "customer", search: true},
+        {id: 4, title: "Yahoo!", type: "customer", search: true}];
 
 // var customers = [
 //         {title: "Microsoft", isFolder:true},

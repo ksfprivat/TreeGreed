@@ -1,5 +1,6 @@
 var treeGrid;
 var toolBar;
+var filterForm;
 var dataSource;
 
 function initDataSource() {
@@ -7,8 +8,9 @@ function initDataSource() {
     dataSource = DataSource.create({
         fields: [
             {name: "id", title: "id", primaryKey: true},
-            {name: "title", title:"Наименование"}
-            ],
+            {name: "title", title:"Наименование"},
+            {name: "search"}
+        ],
         clientOnly: true,
         cacheData: customers
     });
@@ -31,10 +33,6 @@ function createLayout() {
         }
     });
 
-
-    // var treeData = Tree.create({ID: "treeData", data: customers});
-    // treeGrid.setData(treeData);
-
     toolBar = HLayout.create({
         layoutMargin:   5,
         membersMargin:  5,
@@ -44,43 +42,63 @@ function createLayout() {
         ]
     });
 
+    filterForm = DynamicForm.create(
+        {
+            numRows: 0,
+            autoDraw: false,
+            items: [
+                {type: "text", name: "filterEdit", title: "Filter"}
+            ],
+            keyUp: onFilterApply
+        }
+    );
+
     VLayout.create({
         layoutMargin:   5,
         membersMargin:  5,
         width: "300",
         height: "240",
         members: [
+            filterForm,
             treeGrid,
             toolBar
         ]
     });
 }
 
-function unloadNode(parent) {
-    if (parent.children != "") {
-        dataSource.removeData({id: parent.id + "_contacts"});
-        dataSource.removeData({id: parent.id + "_contracts"});
+function onFilterApply() {
+    var filter = filterForm.getValue("filterEdit");
+    if (filter !== null && filter !== undefined) {
+        console.log(filter);
+        treeGrid.filterData({title: filter, search: "true"});
+    } else {
+        treeGrid.clearCriteria();
     }
+
+}
+
+
+function unloadNode(parent) {
+    console.log("unloadNode");
+    for (var i = 0; i < parent.children.length; i++)
+        dataSource.removeData({id: parent.id + "_"+i});
 }
 
 
 function onTreeViewOpenFolder(node) {
     console.log(node);
 
-
     switch (node.type) {
         case "customer":
-            unloadNode(node);
-            dataSource.addData({parentId: node.id, id: node.id+"_contacts", title: "Контакты", type: "contact"});
-            dataSource.addData({parentId: node.id, id: node.id+"_contracts", title: "Контракты", type: "contract"});
-            // for (var i = 0; i < contacts.length; i++) {
-            //     dataSource.addData({parentId: node.id, id: contacts[i].id, title: contacts[i].title, isFolder: false});
-            // }
+            if (node.children.length == 0) {
+                dataSource.addData({parentId: node.id, id: node.id+"_0", title: "Контакты", type: "contact", search: false});
+                dataSource.addData({parentId: node.id, id: node.id+"_1", title: "Контракты", type: "contract", search: false});
+            }
             break;
         case "contact":
-            console.log("This is contacts");
+            unloadNode(node);
             for (var i = 0; i < contacts.length; i++) {
-                dataSource.addData({parentId: node.id, title: contacts[i].title, isFolder: false});
+                dataSource.addData({parentId: node.id, id: node.id+"_"+i, title: contacts[i].title, isFolder: false, search: true} );
             }
             break;
     }
@@ -92,13 +110,11 @@ function onNodeClick() {
 }
 
 function onBtnAddClick() {
-    // var treeData = Tree.create({ID:"treeData", data: dataSource.cacheData});
-    // console.log(treeData);
-    // treeGrid.setData(treeData);
-}
+    console.log("Add");
+    console.log(dataSource.cacheData);
+ }
 
 function onBtnDelClick() {
-    // console.log("Delete");
-    dataSource.removeData({id:"0_0"});
-    dataSource.removeData({id:"0_1"});
+    console.log("Delete");
+
 }
